@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_card.dart';
-import 'dashboard_screen.dart';
+import 'home_screen.dart'; // Make sure this import path is correct
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -51,25 +51,34 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (_, __, ___) =>
-                                    DashboardScreen(name: nameController.text),
-                            transitionsBuilder: (_, animation, __, child) {
-                              return SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(1, 0),
-                                  end: Offset.zero,
-                                ).animate(animation),
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
+                        String internName = nameController.text.trim();
+                        if (internName.isNotEmpty) {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (_, __, ___) =>
+                                      HomeScreen(internName: internName),
+                              transitionsBuilder: (_, animation, __, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(1, 0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter your name'),
+                            ),
+                          );
+                        }
                       },
-                      child: const Text('Enter Dashboard'),
+                      child: const Text('Enter Home'),
                     ),
                   ],
                 ),

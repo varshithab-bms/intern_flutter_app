@@ -1,4 +1,3 @@
-// lib/screens/dashboard_screen.dart
 import 'package:flutter/material.dart';
 import '../widgets/reward_card.dart';
 
@@ -18,52 +17,53 @@ class DashboardScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () {
-              Navigator.pop(context); // Go back to login
-            },
+            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Welcome, $name!',
-              style: Theme.of(context).textTheme.headlineSmall,
+              'Hey $name 👋',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
-            _buildInfoCard(
+            _infoCard(
               icon: Icons.code,
               title: 'Referral Code',
               value: referralCode,
+              context: context,
             ),
+            const SizedBox(height: 12),
 
-            const SizedBox(height: 10),
-
-            _buildInfoCard(
+            _infoCard(
               icon: Icons.volunteer_activism,
               title: 'Donations Raised',
               value: '₹$donationAmount',
+              context: context,
+              highlight: true,
             ),
-
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
             Text(
-              'Your Rewards',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              '🎖 Your Rewards',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
-            GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+            Wrap(
+              spacing: 16,
+              runSpacing: 16,
               children: const [
                 RewardCard(title: "Bronze Badge", icon: Icons.emoji_events),
                 RewardCard(title: "Social Star", icon: Icons.star),
@@ -71,26 +71,53 @@ class DashboardScreen extends StatelessWidget {
                 RewardCard(title: "Donor Connect", icon: Icons.people_alt),
               ],
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard({
+  Widget _infoCard({
     required IconData icon,
     required String title,
     required String value,
+    required BuildContext context,
+    bool highlight = false,
   }) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: Icon(icon, size: 36, color: Colors.deepPurple),
-        title: Text(title),
-        subtitle: Text(
-          value,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      elevation: 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: highlight ? Colors.deepPurple.shade50 : Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Icon(icon, size: 40, color: Colors.deepPurple),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
